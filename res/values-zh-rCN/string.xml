@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">宝宝守护神</string>
+
+    <string name="bt_not_supported">蓝牙未被支持</string>
+    <string name="ble_not_supported">低功耗蓝牙未被支持</string>
+
+    <string name="message_content">医生您好，我的孩子发烧了！请速速联系我！</string>
+
+</resources>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:example="http://schemas.android.com/apk/res/com.ti.sensortag" >
+
+    <PreferenceCategory android:title="Sensors online" >
+
+        <!--
+	        Checkboxes have keys that match (with a simple transformation) the enum names in Sensor.java for easy
+	        decoding/encoding between java code and xml. 
+        -->
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_simple_keys_on"
+            android:persistent="true"
+            android:summary="Turn the Simple keys service on or off."
+            android:title="Simple keys" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_accelerometer_on"
+            android:persistent="true"
+            android:summary="Turn the Accelerometer service on or off."
+            android:title="Accelerometer" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_magnetometer_on"
+            android:persistent="true"
+            android:summary="Turn the Magnetometer service on or off."
+            android:title="Magnetometer" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_gyroscope_on"
+            android:persistent="true"
+            android:summary="Turn the Gyroscope service on or off."
+            android:title="Gyroscope" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="pref_ir_temperature_on"
+            android:persistent="true"
+            android:summary="Turn the IR and Ambient Temperature service on or off."
+            android:title="IR and Ambient Temperature" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_humidity_on"
+            android:persistent="true"
+            android:summary="Turn the Humidity service on or off."
+            android:title="Humidity" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="pref_barometer_on"
+            android:persistent="true"
+            android:summary="Turn the Barometer service on or off."
+            android:title="Barometer" />
+    </PreferenceCategory>
+
+    <Preference
+        android:key="button"
+        android:layout="@layout/preferences_button"
+        android:title="Connect" />
+
+</PreferenceScreen>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Baby Protector</string>
+
+    <string name="bt_not_supported">Bluetooth is not supported</string>
+    <string name="ble_not_supported">Bluetooth Le is not supported</string>
+
+    <string name="message_content">Dear doctor, my child has a high body temperature! Please contect me ASAP!</string>
+
+</resources>
