@@ -1,14 +1,9 @@
 ﻿package net.muststudio.musicbox;
 
-import java.util.Calendar;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.widget.Toast;
 import net.muststudio.musicbox.R;
 import net.muststudio.musicbox.gui.BackgroundedGuiItemContainer;
 import net.muststudio.musicbox.gui.CircleAdapter;
@@ -19,6 +14,7 @@ import net.muststudio.musicbox.gui.DebugGuiItem;
 import net.muststudio.musicbox.gui.ECGViewer;
 import net.muststudio.musicbox.gui.EnjoyModeSwitcher;
 import net.muststudio.musicbox.gui.HalfCircleAdapter;
+import net.muststudio.musicbox.gui.MusicBoxGuiItem;
 import net.muststudio.musicbox.gui.SettingsGuiItem;
 import net.muststudio.musicbox.gui.RadioScanner;
 import net.muststudio.musicbox.gui.RoundRectAdapter;
@@ -26,7 +22,6 @@ import net.muststudio.musicbox.gui.SquareAdapter;
 import net.muststudio.musicbox.gui.TemperatureBackground;
 import net.muststudio.musicbox.gui.TemperatureWave;
 import net.muststudio.musicbox.gui.TextEditControl;
-import net.muststudio.util.guiitemlib.ui.GenericButton;
 import net.muststudio.util.guiitemlib.ui.GenericButton.Task;
 import net.muststudio.util.guiitemlib.ui.GuiItemContainer;
 import net.muststudio.util.guiitemlib.ui.RelativePoint;
@@ -36,8 +31,6 @@ import net.muststudio.util.guiitemlib.view.SurfaceViewFrame;
 
 public final class MainView extends SurfaceViewFrame {
 	private class MainMenu extends ColoredGuiItemContainer {
-		Calendar calendar = Calendar.getInstance();
-
 		public MainMenu() {
 			super(Color.rgb(0x35, 0x49, 0x90));// f1c40f
 			addToList(new BackgroundedGuiItemContainer.BackToExitAdapter());
@@ -277,68 +270,7 @@ public final class MainView extends SurfaceViewFrame {
 					.setTask(new Task() {
 						@Override
 						public void task() {
-							GuiItemContainer container = new BackgroundedGuiItemContainer(
-									BitmapHolder.getInstance().getBitmap(R.drawable.time));
-							container.addToList(new GenericButton(new RelativePoint(0.2, 1.0),
-									new RelativePoint(0.8, 1.2), "SET", 0xff5e6b73)
-									.setTask(new Task() {
-										/* 格式化字符串(7:3->07:03) */
-										private String format(int x) {
-											String s = "" + x;
-											if (s.length() == 1)
-												s = "0" + s;
-											return s;
-										}
-
-										@Override
-										public void task() {
-											calendar.setTimeInMillis(System.currentTimeMillis());
-											int mHour = Settings.getSettings().getHourOfDay();
-											int mMinute = Settings.getSettings().getMinute();
-											calendar.setTimeInMillis(System.currentTimeMillis());
-											calendar.set(Calendar.HOUR_OF_DAY, mHour);
-											calendar.set(Calendar.MINUTE, mMinute);
-											calendar.set(Calendar.SECOND, 0);
-											calendar.set(Calendar.MILLISECOND, 0);
-											/*
-											 * 建立Intent和PendingIntent ，来调用目标组件
-											 */
-											Intent intent = new Intent(MusicActivity.getActivity(),
-													AlarmReceiver.class);
-											PendingIntent pendingIntent = PendingIntent
-													.getBroadcast(MusicActivity.getActivity(), 0,
-															intent, 0);
-											AlarmManager am;
-											/* 获取闹钟管理的实例 */
-											am = MusicActivity.getActivity().alarmManager;
-											/* 设置闹钟 */
-											am.set(AlarmManager.RTC_WAKEUP,
-													calendar.getTimeInMillis(), pendingIntent);
-											String tmpS = "设置闹钟时间为" + format(mHour) + ":"
-													+ format(mMinute);
-											Toast.makeText(getContext(), tmpS, Toast.LENGTH_LONG)
-													.show();
-										}
-									}));
-
-							container.addToList(new CircledIconButtonGuiItem(new RelativePoint(
-									0.43, 1.33), new RelativePoint(0.57, 1.47), Color.rgb(0x1d,
-									0x2a, 0x57), R.drawable.alarm_clock).setTask(new Task() {
-								@Override
-								public void task() {
-									Intent intent = new Intent(MusicActivity.getActivity(),
-											AlarmReceiver.class);
-									PendingIntent pendingIntent = PendingIntent.getBroadcast(
-											MusicActivity.getActivity(), 0, intent, 0);
-									AlarmManager am;
-									/* 获取闹钟管理的实例 */
-									am = MusicActivity.getActivity().alarmManager;
-									/* 取消 */
-									am.cancel(pendingIntent);
-								}
-							}));
-
-							addTo(container);
+							addTo(new MusicBoxGuiItem());
 						}
 					}));
 			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.5 + 0.2 - 0.06,

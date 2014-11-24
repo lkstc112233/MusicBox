@@ -31,14 +31,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="net.muststudio.musicbox.AlarmActivity"
-            android:label="@string/app_name" />
-
-        <receiver
-            android:name="net.muststudio.musicbox.AlarmReceiver"
-            android:process=":remote" >
-        </receiver>
     </application>
 
 </manifest>

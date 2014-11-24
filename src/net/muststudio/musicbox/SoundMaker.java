@@ -2,6 +2,7 @@ package net.muststudio.musicbox;
 
 import java.util.ArrayList;
 
+import net.muststudio.musicbox.MusicBox.SoundPlayer;
 import net.muststudio.musicbox.R;
 import net.muststudio.musicbox.util.Waitter;
 import android.content.Context;
@@ -9,7 +10,7 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Vibrator;
 
-public class SoundMaker {
+public class SoundMaker implements SoundPlayer {
 	private static Vibrator vibrator;
 
 	private static SoundPool soundPool;
@@ -28,7 +29,7 @@ public class SoundMaker {
 	}
 
 	public static void init(Context context) {
-		if (soundPool!=null)
+		if (soundPool != null)
 			return;
 		vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -76,5 +77,16 @@ public class SoundMaker {
 		if (soundWait.isOk())
 			if (soundMode)
 				soundPool.play(soundIds.get(Id % soundIds.size()), 1, 1, 1, 0, 1f);
+	}
+
+	private static void playSoundNo(int i) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void playSoundList(int[] ids) {
+		for (int i : ids)
+			playSoundNo(i);
 	}
 }
