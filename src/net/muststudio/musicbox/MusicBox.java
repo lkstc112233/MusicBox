@@ -2,6 +2,8 @@ package net.muststudio.musicbox;
 
 import java.util.ArrayList;
 
+import net.muststudio.musicbox.util.Waitter;
+
 public final class MusicBox {
 	public interface SoundPlayer {
 		public void playSoundList(int[] ids);
@@ -108,8 +110,11 @@ public final class MusicBox {
 	}
 
 	private int i = 0;
+	private Waitter waitter = new Waitter(30);
 
 	public void playFunc() {
+		if (!waitter.isOk())
+			return;
 		i = (i + 1) % board.getHeight();
 		ArrayList<Cell> l = board.getCellList(i);
 		ArrayList<Integer> il = new ArrayList<Integer>();

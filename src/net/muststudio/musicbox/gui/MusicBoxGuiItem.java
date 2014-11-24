@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.view.MotionEvent;
 import net.muststudio.musicbox.MusicBox;
 import net.muststudio.musicbox.MusicBox.Cell;
+import net.muststudio.musicbox.SoundMaker;
 import net.muststudio.util.guiitemlib.ui.BlockedBackToRemoveGuiItemContainer;
 import net.muststudio.util.guiitemlib.ui.GuiItemContainer;
 import net.muststudio.util.guiitemlib.ui.RelativePoint;
@@ -53,13 +54,14 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 			int height;
 			musicBox = new MusicBox(10, height = (guiItemSquareRect.height()
 					/ guiItemSquareRect.width() * 10));
+			musicBox.setSoundPlayer(new SoundMaker());
 			container = new GuiItemContainer();
 			for (int i = 0; i < 10; ++i)
 				for (int j = 0; j < height; ++j)
-					container.addToList(new CellContainer(new RelativePoint(guiItemSquareRectF.left
-							+ i * guiItemSquareRectF.width() / 10, guiItemSquareRectF.top + j
-							* guiItemSquareRectF.height() / height),
-							new RelativePoint(guiItemSquareRectF.left + (i + 1)
+					container.addToList(new CellContainer(RelativePoint.getRelativePoint(
+							guiItemSquareRectF.left + i * guiItemSquareRectF.width() / 10,
+							guiItemSquareRectF.top + j * guiItemSquareRectF.height() / height),
+							RelativePoint.getRelativePoint(guiItemSquareRectF.left + (i + 1)
 									* guiItemSquareRectF.width() / 10, guiItemSquareRectF.top
 									+ (j + 1) * guiItemSquareRectF.height() / height), musicBox
 									.getCell(i, j)));

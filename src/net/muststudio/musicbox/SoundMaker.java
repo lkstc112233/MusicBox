@@ -33,7 +33,7 @@ public class SoundMaker implements SoundPlayer {
 			return;
 		vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
-		soundPool = new SoundPool(12, AudioManager.STREAM_ALARM, 1);
+		soundPool = new SoundPool(30, AudioManager.STREAM_ALARM, 1);
 		alarmId = soundPool.load(context, R.raw.air, 1);
 		soundIds.add(soundPool.load(context, R.raw.a, 1));
 		soundIds.add(soundPool.load(context, R.raw.b, 1));
@@ -80,7 +80,7 @@ public class SoundMaker implements SoundPlayer {
 	}
 
 	private static void playSoundNo(int i) {
-		// TODO Auto-generated method stub
+		soundPool.play(soundIds.get(i%soundIds.size()), 1, 1, 1, 0, 1f);
 
 	}
 
