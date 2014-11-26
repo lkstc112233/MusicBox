@@ -15,6 +15,28 @@ import net.muststudio.util.guiitemlib.ui.SquareGuiItem;
 public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 	private class MusicBoxContainer extends SquareGuiItem {
 		private class CellContainer extends SquareGuiItem {
+			private class CellFlasherGuiItem extends SquareGuiItem {
+				public CellFlasherGuiItem(RelativePoint left_up, RelativePoint right_bottom) {
+					super(left_up, right_bottom);
+					paintF.setColor(Color.WHITE);
+				}
+
+				private Paint paintF = new Paint();
+
+				@Override
+				public void draw(Canvas canvas) {
+					canvas.drawRect(guiItemSquareRect, paintF);
+				}
+
+				@Override
+				public boolean checkState() {
+					paintF.setAlpha(Math.max(0, paintF.getAlpha() - 30));
+					if (paintF.getAlpha() <= 0)
+						removeThis();
+					return true;
+				}
+			}
+
 			private Cell cell;
 			private Paint paintW = new Paint();
 			private Paint paintB = new Paint();
@@ -22,7 +44,7 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 			public CellContainer(RelativePoint left_up, RelativePoint right_bottom, Cell cell) {
 				super(left_up, right_bottom);
 				this.cell = cell;
-				paintW.setColor(Color.WHITE);
+				paintW.setColor(Color.GRAY);
 				paintB.setColor(Color.BLACK);
 			}
 
@@ -45,6 +67,13 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 				default:
 					return false;
 				}
+				return true;
+			}
+
+			@Override
+			public boolean checkState() {
+				if (cell.isFlashing())
+					addTo(new CellFlasherGuiItem(mainPosition, subPosition));
 				return true;
 			}
 		}

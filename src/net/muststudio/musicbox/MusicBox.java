@@ -20,6 +20,7 @@ public final class MusicBox {
 
 	public class Cell {
 		private boolean status;
+		private boolean flashing;
 
 		public boolean getStatus() {
 			return status;
@@ -27,6 +28,16 @@ public final class MusicBox {
 
 		public void switchStatus() {
 			status = !status;
+		}
+
+		public void flash() {
+			flashing = true;
+		}
+
+		public boolean isFlashing() {
+			boolean toReturn = flashing;
+			flashing = false;
+			return toReturn;
 		}
 	}
 
@@ -110,7 +121,7 @@ public final class MusicBox {
 	}
 
 	private int i = 0;
-	private Waitter waitter = new Waitter(30);
+	private Waitter waitter = new Waitter(15);
 
 	public void playFunc() {
 		if (!waitter.isOk())
@@ -120,9 +131,10 @@ public final class MusicBox {
 		ArrayList<Integer> il = new ArrayList<Integer>();
 		int cou = 0;
 		for (Cell c : l)
-			if (c.status)
+			if (c.status) {
+				c.flash();
 				il.add(cou++);
-			else
+			} else
 				++cou;
 		int[] ia = new int[il.size()];
 		for (int j = 0; j < ia.length; ++j)
