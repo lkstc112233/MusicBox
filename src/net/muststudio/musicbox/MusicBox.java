@@ -141,4 +141,14 @@ public final class MusicBox {
 			ia[j] = il.get(j);
 		soundPlayer.playSoundList(ia);
 	}
+
+	public int getWidth() {
+		return board.width;
+	}
+
+	public void lineChange(boolean[] line, int j) {
+		for (int i = 0; i < line.length; ++i)
+			if (line[i])
+				board.getCell(i, j).switchStatus();
+	}
 }

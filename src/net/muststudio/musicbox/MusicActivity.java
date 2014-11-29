@@ -2,9 +2,6 @@ package net.muststudio.musicbox;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
-import static com.ti.sensortag.models.Devices.LOST_DEVICE_;
-import static com.ti.sensortag.models.Devices.NEW_DEVICE_;
-import static com.ti.sensortag.models.Devices.State.CONNECTED;
 import static com.ti.sensortag.models.Measurements.PROPERTY_ACCELEROMETER;
 import static com.ti.sensortag.models.Measurements.PROPERTY_AMBIENT_TEMPERATURE;
 import static com.ti.sensortag.models.Measurements.PROPERTY_GYROSCOPE;
@@ -73,7 +70,6 @@ public class MusicActivity extends Activity implements PropertyChangeListener {
 	public long lastUpdatePositionSensor;
 	public final float[] phoneMagneticFieldValues = new float[3];
 	public final float[] phoneOrientationValues = new float[3];
-	public final float[] phoneGroundBasedAccelerationValues = new float[3];
 	public final float[] phoneRotate = new float[9];
 	public boolean needAdjustment = false;
 
@@ -132,26 +128,6 @@ public class MusicActivity extends Activity implements PropertyChangeListener {
 		phoneV[0] = phoneV[1] = 0;
 		needAdjustment = false;
 	}
-
-	private void caculateGroundBasedAccelerationValues() {
-		float alpha = phoneOrientationValues[0];
-		float beta = phoneOrientationValues[1];
-		float garma = phoneOrientationValues[2];
-		float x = phoneAccelerometerValues[0];
-		float y = phoneAccelerometerValues[1];
-		float z = phoneAccelerometerValues[2];
-		phoneGroundBasedAccelerationValues[0] = (float) (cos(alpha) * cos(garma) * x + sin(alpha)
-				* cos(garma) * y - sin(garma) * z);
-		phoneGroundBasedAccelerationValues[1] = (float) ((-sin(alpha) * cos(beta) - cos(alpha)
-				* sin(beta) * sin(garma))
-				* x + (-sin(alpha) * sin(beta) * sin(garma) + cos(alpha) * cos(beta)) * y - sin(beta)
-				* cos(garma) * z);
-		phoneGroundBasedAccelerationValues[2] = (float) ((-sin(alpha) * sin(beta) + cos(alpha)
-				* cos(beta) * sin(garma))
-				* x + (sin(alpha) * cos(beta) * sin(garma) + cos(alpha) * sin(beta)) * y + cos(beta)
-				* cos(garma) * z);
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -273,7 +249,6 @@ public class MusicActivity extends Activity implements PropertyChangeListener {
 				SensorManager.getRotationMatrix(phoneRotate, null, phoneAccelerometerValues,
 						phoneMagneticFieldValues);
 				SensorManager.getOrientation(phoneRotate, phoneOrientationValues);
-				caculateGroundBasedAccelerationValues();
 			}
 			updatePosition();
 		}
@@ -398,12 +373,6 @@ public class MusicActivity extends Activity implements PropertyChangeListener {
 			refreshSensorOrientation();
 		} else if (property.equals(PROPERTY_GYROSCOPE)) {
 			sensorGyroscopeValues = (Point3D) event.getNewValue();
-		} else if (property.equals(LOST_DEVICE_ + CONNECTED)) {
-			// A device has been disconnected
-			// We notify the user with an alarm
-			SoundMaker.startAlarm();
-		} else if (property.equals(NEW_DEVICE_ + CONNECTED)) {
-			SoundMaker.stopAlarm();
 		}
 	}
 }

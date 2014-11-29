@@ -86,26 +86,6 @@ public class DebugGuiItem extends GuiItem {
 		canvas.drawText(
 				"z:" + Float.toString(MusicActivity.getActivity().phoneMagneticFieldValues[2]),
 				400, y += dp, paint);
-		// canvas.drawText("OrientationValues:", 400, y += dp, paint);
-		// canvas.drawText(
-		// "x*sin(theta/2)"
-		// + Float.toString(JimmyActivity.getActivity().phoneRotationValues[0]),
-		// 400,
-		// y += dp, paint);
-		// canvas.drawText(
-		// "y*sin(theta/2)"
-		// + Float.toString(JimmyActivity.getActivity().phoneRotationValues[1]),
-		// 400,
-		// y += dp, paint);
-		// canvas.drawText(
-		// "z*sin(theta/2)"
-		// + Float.toString(JimmyActivity.getActivity().phoneRotationValues[2]),
-		// 400,
-		// y += dp, paint);
-		// canvas.drawText(
-		// "cos(theta/2)" +
-		// Float.toString(JimmyActivity.getActivity().phoneRotationValues[3]),
-		// 400, y += dp, paint);
 		canvas.drawText("MISSING", 400, y += dp, paint);
 		canvas.drawText("OrientationValues:", 400, y += dp, paint);
 		canvas.drawText(
@@ -117,35 +97,6 @@ public class DebugGuiItem extends GuiItem {
 		canvas.drawText(
 				"z:" + Float.toString(MusicActivity.getActivity().phoneOrientationValues[2]), 400,
 				y += dp, paint);
-		// canvas.drawText("LinearAccelerometerValues:", 400, y += dp, paint);
-		// canvas.drawText(
-		// "x:"
-		// +
-		// Float.toString(JimmyActivity.getActivity().phoneLinearAccelerometerValues[0]),
-		// 400, y += dp, paint);
-		// canvas.drawText(
-		// "y:"
-		// +
-		// Float.toString(JimmyActivity.getActivity().phoneLinearAccelerometerValues[1]),
-		// 400, y += dp, paint);
-		// canvas.drawText(
-		// "z:"
-		// +
-		// Float.toString(JimmyActivity.getActivity().phoneLinearAccelerometerValues[2]),
-		// 400, y += dp, paint);
-		canvas.drawText("GroundBasedAccelerationValues:", 400, y += dp, paint);
-		canvas.drawText(
-				"x:"
-						+ Float.toString(MusicActivity.getActivity().phoneGroundBasedAccelerationValues[0]),
-				400, y += dp, paint);
-		canvas.drawText(
-				"y:"
-						+ Float.toString(MusicActivity.getActivity().phoneGroundBasedAccelerationValues[1]),
-				400, y += dp, paint);
-		canvas.drawText(
-				"z:"
-						+ Float.toString(MusicActivity.getActivity().phoneGroundBasedAccelerationValues[2]),
-				400, y += dp, paint);
 		canvas.drawText("PhoneV:", 400, y += dp, paint);
 		canvas.drawText("x:" + Float.toString(MusicActivity.getActivity().phoneV[0]), 400, y += dp,
 				paint);

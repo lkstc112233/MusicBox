@@ -4,16 +4,62 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
+import net.muststudio.musicbox.MusicActivity;
 import net.muststudio.musicbox.MusicBox;
 import net.muststudio.musicbox.MusicBox.Cell;
 import net.muststudio.musicbox.SoundMaker;
+import net.muststudio.musicbox.util.Waitter;
 import net.muststudio.util.guiitemlib.ui.BlockedBackToRemoveGuiItemContainer;
+import net.muststudio.util.guiitemlib.ui.GuiItem;
 import net.muststudio.util.guiitemlib.ui.GuiItemContainer;
 import net.muststudio.util.guiitemlib.ui.RelativePoint;
 import net.muststudio.util.guiitemlib.ui.SquareGuiItem;
 
 public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 	private class MusicBoxContainer extends SquareGuiItem {
+		private int waitter2 = 0;
+
+		private class MusicBoxChanger extends GuiItem {
+			@Override
+			public void draw(Canvas canvas) {
+			}
+
+			Waitter waitter = new Waitter(10);
+			Waitter waitterRithm = new Waitter(4);
+			int y = 0;
+
+			@Override
+			public boolean checkState() {
+				if (waitter.isOk())
+					changeMusic();
+				return true;
+			}
+
+			private void changeMusic() {
+				if (waitter2 > 0)
+					return;
+				boolean[] line = new boolean[musicBox.getWidth()];
+				for (int i = 0; i < line.length; ++i)
+					line[i] = false;
+				line[(int) Math.abs(MusicActivity.getActivity().phoneOrientationValues[0] * 10)
+						% line.length] = true;
+				// line[(int)
+				// Math.abs(MusicActivity.getActivity().phoneOrientationValues[1]
+				// * 42)
+				// % line.length] = true;
+				// line[(int)
+				// Math.abs(MusicActivity.getActivity().phoneOrientationValues[2]
+				// * 42)
+				// % line.length] = true;
+				if (!waitterRithm.isOk())
+					musicBox.lineChange(line, y++);
+				else
+					y++;
+			}
+		}
+
+		private boolean cellChangeStatus = false;
+
 		private class CellContainer extends SquareGuiItem {
 			private class CellFlasherGuiItem extends SquareGuiItem {
 				public CellFlasherGuiItem(RelativePoint left_up, RelativePoint right_bottom) {
@@ -60,9 +106,18 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 			public boolean onTouchEvent(MotionEvent e) {
 				if (!isInsideOf(RelativePoint.getRelativePoint(e.getX(), e.getY())))
 					return false;
+				synchronized (this) {
+					waitter2 = 100000;
+				}
 				switch (e.getAction()) {
-				case MotionEvent.ACTION_UP:
+				case MotionEvent.ACTION_DOWN:
 					cell.switchStatus();
+					cellChangeStatus = cell.getStatus();
+					break;
+				case MotionEvent.ACTION_MOVE:
+				case MotionEvent.ACTION_UP:
+					if (cell.getStatus() ^ cellChangeStatus)
+						cell.switchStatus();
 					break;
 				default:
 					return false;
@@ -72,6 +127,10 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 
 			@Override
 			public boolean checkState() {
+				synchronized (this) {
+					if (--waitter2 < 0)
+						waitter2 = 0;
+				}
 				if (cell.isFlashing())
 					addTo(new CellFlasherGuiItem(mainPosition, subPosition));
 				return true;
@@ -81,19 +140,21 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 		public MusicBoxContainer(RelativePoint left_up, RelativePoint right_bottom) {
 			super(left_up, right_bottom);
 			int height;
-			musicBox = new MusicBox(10, height = (guiItemSquareRect.height()
-					/ guiItemSquareRect.width() * 10));
+			final int size = 21;
+			musicBox = new MusicBox(size, height = (int) (guiItemSquareRectF.height()
+					/ guiItemSquareRectF.width() * size));
 			musicBox.setSoundPlayer(new SoundMaker());
 			container = new GuiItemContainer();
-			for (int i = 0; i < 10; ++i)
+			for (int i = 0; i < size; ++i)
 				for (int j = 0; j < height; ++j)
 					container.addToList(new CellContainer(RelativePoint.getRelativePoint(
-							guiItemSquareRectF.left + i * guiItemSquareRectF.width() / 10,
+							guiItemSquareRectF.left + i * guiItemSquareRectF.width() / size,
 							guiItemSquareRectF.top + j * guiItemSquareRectF.height() / height),
 							RelativePoint.getRelativePoint(guiItemSquareRectF.left + (i + 1)
-									* guiItemSquareRectF.width() / 10, guiItemSquareRectF.top
+									* guiItemSquareRectF.width() / size, guiItemSquareRectF.top
 									+ (j + 1) * guiItemSquareRectF.height() / height), musicBox
 									.getCell(i, j)));
+			container.addToList(new MusicBoxChanger());
 		}
 
 		private MusicBox musicBox;
@@ -139,6 +200,6 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 
 	public MusicBoxGuiItem() {
 		super();
-		addToList(new MusicBoxContainer(new RelativePoint(0, 0), new RelativePoint(1, 1)));
+		addToList(new MusicBoxContainer(new RelativePoint(0, 0), new RelativePoint(1, 0, false)));
 	}
 }
