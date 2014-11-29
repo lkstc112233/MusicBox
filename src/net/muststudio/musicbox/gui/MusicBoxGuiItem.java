@@ -3,6 +3,7 @@ package net.muststudio.musicbox.gui;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import net.muststudio.musicbox.MusicActivity;
 import net.muststudio.musicbox.MusicBox;
@@ -43,14 +44,6 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 					line[i] = false;
 				line[(int) Math.abs(MusicActivity.getActivity().phoneOrientationValues[0] * 10)
 						% line.length] = true;
-				// line[(int)
-				// Math.abs(MusicActivity.getActivity().phoneOrientationValues[1]
-				// * 42)
-				// % line.length] = true;
-				// line[(int)
-				// Math.abs(MusicActivity.getActivity().phoneOrientationValues[2]
-				// * 42)
-				// % line.length] = true;
 				if (!waitterRithm.isOk())
 					musicBox.lineChange(line, y++);
 				else
@@ -61,6 +54,33 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 		private boolean cellChangeStatus = false;
 
 		private class CellContainer extends SquareGuiItem {
+			private class CellWaveGuiItem extends SquareGuiItem {
+				public CellWaveGuiItem(RelativePoint left_up, RelativePoint right_bottom) {
+					super(left_up, right_bottom);
+					paintW.setColor(Color.WHITE);
+					paintW.setStyle(Style.STROKE);
+					paintW.setStrokeWidth(15);
+				}
+
+				private Paint paintW = new Paint();
+				private float radius = 0;
+				private final float step = 20;
+
+				@Override
+				public void draw(Canvas canvas) {
+					canvas.drawCircle(guiItemSquareRect.exactCenterX(),
+							guiItemSquareRect.exactCenterY(), radius += step, paintW);
+				}
+
+				@Override
+				public boolean checkState() {
+					paintW.setAlpha(Math.max(0, paintW.getAlpha() - 20));
+					if (paintW.getAlpha() <= 0)
+						removeThis();
+					return true;
+				}
+			}
+
 			private class CellFlasherGuiItem extends SquareGuiItem {
 				public CellFlasherGuiItem(RelativePoint left_up, RelativePoint right_bottom) {
 					super(left_up, right_bottom);
@@ -131,8 +151,10 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 					if (--waitter2 < 0)
 						waitter2 = 0;
 				}
-				if (cell.isFlashing())
+				if (cell.isFlashing()) {
 					addTo(new CellFlasherGuiItem(mainPosition, subPosition));
+					addTo(new CellWaveGuiItem(mainPosition, subPosition));
+				}
 				return true;
 			}
 		}
