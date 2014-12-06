@@ -4,18 +4,7 @@ import java.util.ArrayList;
 
 import net.muststudio.musicbox.util.Waitter;
 
-public final class MusicBox {
-	public interface SoundPlayer {
-		public void playSoundList(int[] ids);
-	}
-
-	private class DullSoundPlayer implements SoundPlayer {
-		@Override
-		public void playSoundList(int[] ids) {
-
-		}
-	}
-
+public final class MusicGrid {
 	private SoundPlayer soundPlayer = new DullSoundPlayer();
 
 	public class Cell {
@@ -81,11 +70,11 @@ public final class MusicBox {
 
 	private CellBoard board;
 
-	public MusicBox() {
+	public MusicGrid() {
 		this(20, 50);
 	}
 
-	public MusicBox(int width, int height) {
+	public MusicGrid(int width, int height) {
 		board = new CellBoard(width, height);
 	}
 

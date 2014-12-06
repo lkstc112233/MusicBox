@@ -9,7 +9,7 @@ import net.muststudio.musicbox.gui.CircleWinger;
 import net.muststudio.musicbox.gui.CircledIconButtonGuiItem;
 import net.muststudio.musicbox.gui.ColoredGuiItemContainer;
 import net.muststudio.musicbox.gui.EnjoyModeSwitcher;
-import net.muststudio.musicbox.gui.MusicBoxGuiItem;
+import net.muststudio.musicbox.gui.MusicGridGuiItem;
 import net.muststudio.musicbox.gui.SquareAdapter;
 import net.muststudio.util.guiitemlib.ui.GenericButton.Task;
 import net.muststudio.util.guiitemlib.ui.GuiItemContainer;
@@ -48,7 +48,7 @@ public final class MainView extends SurfaceViewFrame {
 					new RelativePoint(0.85, 0.95), backColor, R.drawable.music).setTask(new Task() {
 				@Override
 				public void task() {
-					addTo(new MusicBoxGuiItem());
+					addTo(new MusicGridGuiItem());
 				}
 			}));
 

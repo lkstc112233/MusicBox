@@ -2,7 +2,6 @@ package net.muststudio.musicbox;
 
 import java.util.ArrayList;
 
-import net.muststudio.musicbox.MusicBox.SoundPlayer;
 import net.muststudio.musicbox.R;
 import net.muststudio.musicbox.util.Waitter;
 import android.content.Context;
@@ -68,5 +67,9 @@ public class SoundMaker implements SoundPlayer {
 	public void playSoundList(int[] ids) {
 		for (int i : ids)
 			playSoundNo(i);
+	}
+
+	public void playSoundId(int Id) {
+		playSound(Id);
 	}
 }

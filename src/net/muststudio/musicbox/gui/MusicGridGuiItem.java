@@ -3,11 +3,10 @@ package net.muststudio.musicbox.gui;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Paint.Style;
 import android.view.MotionEvent;
 import net.muststudio.musicbox.MusicActivity;
-import net.muststudio.musicbox.MusicBox;
-import net.muststudio.musicbox.MusicBox.Cell;
+import net.muststudio.musicbox.MusicGrid;
+import net.muststudio.musicbox.MusicGrid.Cell;
 import net.muststudio.musicbox.SoundMaker;
 import net.muststudio.musicbox.util.Waitter;
 import net.muststudio.util.guiitemlib.ui.BlockedBackToRemoveGuiItemContainer;
@@ -16,7 +15,7 @@ import net.muststudio.util.guiitemlib.ui.GuiItemContainer;
 import net.muststudio.util.guiitemlib.ui.RelativePoint;
 import net.muststudio.util.guiitemlib.ui.SquareGuiItem;
 
-public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
+public final class MusicGridGuiItem extends BlockedBackToRemoveGuiItemContainer {
 	private class MusicBoxContainer extends SquareGuiItem {
 		private int waitter2 = 0;
 
@@ -54,54 +53,6 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 		private boolean cellChangeStatus = false;
 
 		private class CellContainer extends SquareGuiItem {
-			private class CellWaveGuiItem extends SquareGuiItem {
-				public CellWaveGuiItem(RelativePoint left_up, RelativePoint right_bottom) {
-					super(left_up, right_bottom);
-					paintW.setColor(Color.WHITE);
-					paintW.setStyle(Style.STROKE);
-					paintW.setStrokeWidth(15);
-				}
-
-				private Paint paintW = new Paint();
-				private float radius = 0;
-				private final float step = 20;
-
-				@Override
-				public void draw(Canvas canvas) {
-					canvas.drawCircle(guiItemSquareRect.exactCenterX(),
-							guiItemSquareRect.exactCenterY(), radius += step, paintW);
-				}
-
-				@Override
-				public boolean checkState() {
-					paintW.setAlpha(Math.max(0, paintW.getAlpha() - 20));
-					if (paintW.getAlpha() <= 0)
-						removeThis();
-					return true;
-				}
-			}
-
-			private class CellFlasherGuiItem extends SquareGuiItem {
-				public CellFlasherGuiItem(RelativePoint left_up, RelativePoint right_bottom) {
-					super(left_up, right_bottom);
-					paintF.setColor(Color.WHITE);
-				}
-
-				private Paint paintF = new Paint();
-
-				@Override
-				public void draw(Canvas canvas) {
-					canvas.drawRect(guiItemSquareRect, paintF);
-				}
-
-				@Override
-				public boolean checkState() {
-					paintF.setAlpha(Math.max(0, paintF.getAlpha() - 30));
-					if (paintF.getAlpha() <= 0)
-						removeThis();
-					return true;
-				}
-			}
 
 			private Cell cell;
 			private Paint paintW = new Paint();
@@ -163,7 +114,7 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 			super(left_up, right_bottom);
 			int height;
 			final int size = 21;
-			musicBox = new MusicBox(size, height = (int) (guiItemSquareRectF.height()
+			musicBox = new MusicGrid(size, height = (int) (guiItemSquareRectF.height()
 					/ guiItemSquareRectF.width() * size));
 			musicBox.setSoundPlayer(new SoundMaker());
 			container = new GuiItemContainer();
@@ -179,7 +130,7 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 			container.addToList(new MusicBoxChanger());
 		}
 
-		private MusicBox musicBox;
+		private MusicGrid musicBox;
 		private GuiItemContainer container;
 
 		@Override
@@ -220,7 +171,7 @@ public final class MusicBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 
 	}
 
-	public MusicBoxGuiItem() {
+	public MusicGridGuiItem() {
 		super();
 		addToList(new MusicBoxContainer(new RelativePoint(0, 0), new RelativePoint(1, 0, false)));
 	}
