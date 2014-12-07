@@ -15,8 +15,6 @@ import net.muststudio.util.guiitemlib.ui.SquareGuiItem;
 
 public final class MusicBallBoxGuiItem extends BlockedBackToRemoveGuiItemContainer {
 	private class MusicBallBoxContainer extends SquareGuiItem {
-		private int waitter2 = 0;
-
 		private class BallContainer extends SquareGuiItem {
 			private Ball ball;
 			private Paint paintW = new Paint();
@@ -29,22 +27,11 @@ public final class MusicBallBoxGuiItem extends BlockedBackToRemoveGuiItemContain
 
 			@Override
 			public void draw(Canvas canvas) {
-				// TODO
-				canvas.drawCircle(guiItemSquareRectF.centerX(), guiItemSquareRectF.centerY(),
-						MusicBallBoxContainer.this.guiItemSquareRectF.width() / 21, paintW);
-			}
-
-			@Override
-			public boolean checkState() {
-				synchronized (this) {
-					if (--waitter2 < 0)
-						waitter2 = 0;
-				}
-				if (cell.isFlashing()) {
-					addTo(new CellFlasherGuiItem(mainPosition, subPosition));
-					addTo(new CellWaveGuiItem(mainPosition, subPosition));
-				}
-				return true;
+				canvas.drawCircle(guiItemSquareRectF.left + ball.getX()
+						* MusicBallBoxContainer.this.guiItemSquareRectF.width() / 21,
+						guiItemSquareRectF.top + ball.getY()
+								* MusicBallBoxContainer.this.guiItemSquareRectF.width() / 21,
+						MusicBallBoxContainer.this.guiItemSquareRectF.width() / 21 / 2, paintW);
 			}
 		}
 
@@ -65,13 +52,11 @@ public final class MusicBallBoxGuiItem extends BlockedBackToRemoveGuiItemContain
 
 			@Override
 			public boolean checkState() {
-				synchronized (this) {
-					if (--waitter2 < 0)
-						waitter2 = 0;
-				}
 				if (cell.isFlashing()) {
 					addTo(new CellFlasherGuiItem(mainPosition, subPosition));
 					addTo(new CellWaveGuiItem(mainPosition, subPosition));
+					addTo(new CellParticleGuiItem(new RelativePoint(mainPosition.getRelativeX(),
+							mainPosition.getRelativeY())));
 				}
 				return true;
 			}
@@ -115,6 +100,7 @@ public final class MusicBallBoxGuiItem extends BlockedBackToRemoveGuiItemContain
 								guiItemSquareRectF.left + guiItemSquareRectF.width(),
 								guiItemSquareRectF.top + (i + 1) * guiItemSquareRectF.height()
 										/ height), musicBox.getCell(3, i)));
+			addToList(new BallContainer(mainPosition, subPosition, musicBox.getBall()));
 		}
 
 		private MusicBallBox musicBox;
@@ -159,7 +145,7 @@ public final class MusicBallBoxGuiItem extends BlockedBackToRemoveGuiItemContain
 	}
 
 	public MusicBallBoxGuiItem() {
-		super();
+		backgroundColor = Color.BLACK;
 		addToList(new MusicBallBoxContainer(new RelativePoint(0, 0), new RelativePoint(1, 0, false)));
 	}
 }

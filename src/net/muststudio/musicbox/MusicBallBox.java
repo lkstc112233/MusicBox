@@ -1,8 +1,6 @@
 package net.muststudio.musicbox;
 
-import java.util.ArrayList;
-
-import net.muststudio.musicbox.util.Waitter;
+import net.muststudio.musicbox.util.Decounter;
 
 public class MusicBallBox {
 	private SoundPlayer soundPlayer = new DullSoundPlayer();
@@ -13,7 +11,9 @@ public class MusicBallBox {
 		private int y;
 		private int id;
 
-		public Block(int id) {
+		public Block(int x, int y, int id) {
+			this.x = x;
+			this.y = y;
 			this.id = id;
 		}
 
@@ -21,6 +21,11 @@ public class MusicBallBox {
 			if ((x - ball.x) * (x - ball.x) + (y - ball.y) * (y - ball.y) < ball.radius + 0.5)
 				return true;
 			return false;
+		}
+
+		public void playSound() {
+			soundPlayer.playSoundId(id);
+			flash();
 		}
 
 		public void flash() {
@@ -37,6 +42,15 @@ public class MusicBallBox {
 	private class Grav {
 		public float x;
 		public float y;
+
+		public void refresh() {
+			final float factor = 0.3f;
+			final float factor2 = 0.03f;
+			x = -MusicActivity.getActivity().phoneAccelerometerValues[0] * factor;
+			y = MusicActivity.getActivity().phoneAccelerometerValues[1] * factor;
+			x += MusicActivity.getActivity().sensorAccelerometerValues.x * factor2;
+			y += MusicActivity.getActivity().sensorAccelerometerValues.y * factor2;
+		}
 	}
 
 	private class Velo {
@@ -46,6 +60,11 @@ public class MusicBallBox {
 		public void add(Grav g) {
 			x += g.x;
 			y += g.y;
+		}
+
+		public void sub() {
+			x *= 0.95;
+			y *= 0.95;
 		}
 
 		public void swapX() {
@@ -69,6 +88,14 @@ public class MusicBallBox {
 
 		}
 
+		public float getX() {
+			return x;
+		}
+
+		public float getY() {
+			return y;
+		}
+
 		public Ball(int x, int y) {
 			this.x = x;
 			this.y = y;
@@ -77,19 +104,21 @@ public class MusicBallBox {
 		}
 
 		public void move() {
-			g.x = MusicActivity.getActivity().phoneAccelerometerValues[0];
-			g.y = MusicActivity.getActivity().phoneAccelerometerValues[1];
+			g.refresh();
 			x += v.x + g.x / 2;
 			y += v.y + g.y / 2;
 			v.add(g);
+			v.sub();
 		}
 
 		public void swapX(float x) {
 			v.swapX();
+			this.x = 2 * x - this.x;
 		}
 
 		public void swapY(float y) {
 			v.swapY();
+			this.y = 2 * y - this.y;
 		}
 	}
 
@@ -112,13 +141,17 @@ public class MusicBallBox {
 			ball = new Ball(width / 2, height / 2);
 			int n = 0;
 			for (int i = 0; i < width; ++i) {
-				x1[i] = new Block(n++ % 21);
-				x2[i] = new Block(n++ % 21);
+				x1[i] = new Block(i, 0, n++ % 21);
+				x2[i] = new Block(i, height - 1, n++ % 21);
 			}
 			for (int i = 0; i < height; ++i) {
-				y1[i] = new Block(n++ % 21);
-				y2[i] = new Block(n++ % 21);
+				y1[i] = new Block(0, i, n++ % 21);
+				y2[i] = new Block(width - 1, i, n++ % 21);
 			}
+		}
+
+		public Ball getBall() {
+			return ball;
 		}
 
 		public void move() {
@@ -153,18 +186,14 @@ public class MusicBallBox {
 			}
 			return null;
 		}
-
-		public Block getCell(int i) {
-			return getCell(i % height, i / height);
-		}
-
-		public int getHeight() {
-			return height;
-		}
-
-		public int getWidth() {
-			return width;
-		}
+		//
+		// public int getHeight() {
+		// return height;
+		// }
+		//
+		// public int getWidth() {
+		// return width;
+		// }
 	}
 
 	private BallBoard board;
@@ -185,15 +214,35 @@ public class MusicBallBox {
 		this.soundPlayer = soundPlayer;
 	}
 
-	private int i = 0;
-	private Waitter waitter = new Waitter(15);
+	private Decounter waitter = new Decounter(15);
 
 	public void playFunc() {
 		board.move();
-		if (!waitter.isOk())
-			return;
-		i = (i + 1) % board.getHeight();
-		ArrayList<Integer> il = new ArrayList<Integer>();
+		waitter.count();
+		for (int i = 0; i < getWidth(); ++i) {
+			if (board.getCell(0, i).isCollided(board.getBall()))
+				if (waitter.isOk()) {
+					board.getCell(0, i).playSound();
+					return;
+				}
+			if (board.getCell(1, i).isCollided(board.getBall()))
+				if (waitter.isOk()) {
+					board.getCell(1, i).playSound();
+					return;
+				}
+		}
+		for (int i = 0; i < getHeight(); ++i) {
+			if (board.getCell(2, i).isCollided(board.getBall()))
+				if (waitter.isOk()) {
+					board.getCell(2, i).playSound();
+					return;
+				}
+			if (board.getCell(3, i).isCollided(board.getBall()))
+				if (waitter.isOk()) {
+					board.getCell(3, i).playSound();
+					return;
+				}
+		}
 	}
 
 	public int getWidth() {
@@ -202,5 +251,9 @@ public class MusicBallBox {
 
 	public int getHeight() {
 		return board.height;
+	}
+
+	public Ball getBall() {
+		return board.getBall();
 	}
 }

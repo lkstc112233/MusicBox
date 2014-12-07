@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">舞动音乐</string>
+    <string name="app_name">舞动音悦</string>
 
     <string name="bt_not_supported">蓝牙未被支持</string>
     <string name="ble_not_supported">低功耗蓝牙未被支持</string>

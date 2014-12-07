@@ -70,6 +70,6 @@ public class SoundMaker implements SoundPlayer {
 	}
 
 	public void playSoundId(int Id) {
-		playSound(Id);
+		playSoundNo(Id);
 	}
 }

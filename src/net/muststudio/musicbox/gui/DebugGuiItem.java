@@ -102,18 +102,11 @@ public class DebugGuiItem extends GuiItem {
 				paint);
 		canvas.drawText("y:" + Float.toString(MusicActivity.getActivity().phoneV[1]), 400, y += dp,
 				paint);
-		// canvas.drawText("z:" +
-		// Float.toString(JimmyActivity.getActivity().phoneV[2]), 400, y += dp,
-		// paint);
 		canvas.drawText("phoneP:", 400, y += dp, paint);
 		canvas.drawText("x:" + Float.toString(MusicActivity.getActivity().phoneP[0]), 400, y += dp,
 				paint);
 		canvas.drawText("y:" + Float.toString(MusicActivity.getActivity().phoneP[1]), 400, y += dp,
 				paint);
-		// canvas.drawText("z:" +
-		// Float.toString(JimmyActivity.getActivity().phoneP[2]), 400, y += dp,
-		// paint);
-
 	}
 
 	@Override

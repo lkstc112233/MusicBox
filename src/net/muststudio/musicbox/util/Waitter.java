@@ -5,8 +5,8 @@ public class Waitter {
 		this(1);
 	}
 
-	int waitLength;
-	int currentStep;
+	protected int waitLength;
+	protected int currentStep;
 
 	public Waitter(int i) {
 		currentStep = 0;

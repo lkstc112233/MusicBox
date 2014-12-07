@@ -8,7 +8,9 @@ import net.muststudio.musicbox.gui.CircleAdapter;
 import net.muststudio.musicbox.gui.CircleWinger;
 import net.muststudio.musicbox.gui.CircledIconButtonGuiItem;
 import net.muststudio.musicbox.gui.ColoredGuiItemContainer;
+import net.muststudio.musicbox.gui.DebugGuiItem;
 import net.muststudio.musicbox.gui.EnjoyModeSwitcher;
+import net.muststudio.musicbox.gui.MusicBallBoxGuiItem;
 import net.muststudio.musicbox.gui.MusicGridGuiItem;
 import net.muststudio.musicbox.gui.SquareAdapter;
 import net.muststudio.util.guiitemlib.ui.GenericButton.Task;
@@ -45,10 +47,24 @@ public final class MainView extends SurfaceViewFrame {
 
 			int backColor = Color.rgb(0x1d, 0x2a, 0x57);
 			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.15, 0.25),
-					new RelativePoint(0.85, 0.95), backColor, R.drawable.music).setTask(new Task() {
+					new RelativePoint(0.5, 0.6), backColor, R.drawable.music).setTask(new Task() {
+				@Override
+				public void task() {
+					addTo(new MusicBallBoxGuiItem());
+				}
+			}));
+			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.5, 0.6),
+					new RelativePoint(0.85, 0.95), backColor, R.drawable.music2).setTask(new Task() {
 				@Override
 				public void task() {
 					addTo(new MusicGridGuiItem());
+				}
+			}));
+			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.43, 1.13),
+					new RelativePoint(0.57, 1.27), backColor, R.drawable.play).setTask(new Task() {
+				@Override
+				public void task() {
+					addTo(new DebugGuiItem());
 				}
 			}));
 
