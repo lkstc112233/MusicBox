@@ -45,13 +45,6 @@ public class DebugGuiItem extends GuiItem {
 		canvas.drawText(
 				"z:" + Double.toString(MusicActivity.getActivity().sensorGyroscopeValues.z), 0,
 				y += dp, paint);
-		canvas.drawText(
-				"AmbientTemperature:"
-						+ Double.toString(MusicActivity.getActivity().sensorAmbientTemperature), 0,
-				y += dp, paint);
-		canvas.drawText(
-				"IRTemperature:" + Double.toString(MusicActivity.getActivity().sensorIrTemperature),
-				0, y += dp, paint);
 		canvas.drawText("OrientationValues:", 0, y += dp, paint);
 		canvas.drawText(
 				"x:" + Float.toString(MusicActivity.getActivity().sensorOrientationValuesf[0]), 0,
@@ -86,7 +79,6 @@ public class DebugGuiItem extends GuiItem {
 		canvas.drawText(
 				"z:" + Float.toString(MusicActivity.getActivity().phoneMagneticFieldValues[2]),
 				400, y += dp, paint);
-		canvas.drawText("MISSING", 400, y += dp, paint);
 		canvas.drawText("OrientationValues:", 400, y += dp, paint);
 		canvas.drawText(
 				"x:" + Float.toString(MusicActivity.getActivity().phoneOrientationValues[0]), 400,
