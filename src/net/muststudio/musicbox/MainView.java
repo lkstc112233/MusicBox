@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import net.muststudio.musicbox.R;
 import net.muststudio.musicbox.gui.BackgroundedGuiItemContainer;
+import net.muststudio.musicbox.gui.BoyGuiItemContainer;
 import net.muststudio.musicbox.gui.CircleAdapter;
 import net.muststudio.musicbox.gui.CircleWinger;
 import net.muststudio.musicbox.gui.CircledIconButtonGuiItem;
@@ -12,6 +13,8 @@ import net.muststudio.musicbox.gui.DebugGuiItem;
 import net.muststudio.musicbox.gui.EnjoyModeSwitcher;
 import net.muststudio.musicbox.gui.MusicBallBoxGuiItem;
 import net.muststudio.musicbox.gui.MusicGridGuiItem;
+import net.muststudio.musicbox.gui.PikachuGuiItemContainer;
+import net.muststudio.musicbox.gui.ShiningHeartGuiItem;
 import net.muststudio.musicbox.gui.SquareAdapter;
 import net.muststudio.util.guiitemlib.ui.GenericButton.Task;
 import net.muststudio.util.guiitemlib.ui.GuiItemContainer;
@@ -53,8 +56,8 @@ public final class MainView extends SurfaceViewFrame {
 					addTo(new MusicBallBoxGuiItem());
 				}
 			}));
-			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.5, 0.6),
-					new RelativePoint(0.85, 0.95), backColor, R.drawable.music2).setTask(new Task() {
+			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.5, 0.6), new RelativePoint(
+					0.85, 0.95), backColor, R.drawable.music2).setTask(new Task() {
 				@Override
 				public void task() {
 					addTo(new MusicGridGuiItem());
@@ -69,6 +72,7 @@ public final class MainView extends SurfaceViewFrame {
 			}));
 
 			addToList(new EnjoyModeSwitcher());
+			addToList(new BoyGuiItemContainer());
 		}
 	}
 
