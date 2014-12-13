@@ -1,79 +1,29 @@
 package net.muststudio.musicbox.gui;
 
+import java.util.ArrayDeque;
+
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
-import android.graphics.PointF;
+import android.graphics.RectF;
+import android.media.MediaPlayer;
+import net.muststudio.musicbox.MusicActivity;
+import net.muststudio.musicbox.R;
 import net.muststudio.musicbox.gui.FlashingBoardGuiItem.GridBoard.Grid;
+import net.muststudio.musicbox.util.Waitter;
 import net.muststudio.util.guiitemlib.ui.BlockedBackToRemoveGuiItemContainer;
 import net.muststudio.util.guiitemlib.ui.GuiItem;
+import net.muststudio.util.guiitemlib.ui.ScreenInfo;
 
 public class FlashingBoardGuiItem extends BlockedBackToRemoveGuiItemContainer {
-	public class Point3D {
-		public float x, y, z;
-
-		public Point3D(Point3D point) {
-			x = point.x;
-			y = point.y;
-			z = point.z;
-		}
-
-		public Point3D(float x, float y, float z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
-	}
-
-	public class Camera {
-		public float x;
-		public float y;
-		public float z;
-		public float n = 100;
-
-		public void moveOnly(float x, float y, float z) {
-			this.x += x;
-			this.y += y;
-			this.z += z;
-		}
-
-		public PointF convert(Point3D pin) {
-			float x = pin.x - this.x;
-			float y = pin.y - this.y;
-			float z = pin.z - this.z;
-			PointF pnt = new PointF();
-			pnt.x = x * n / z;
-			pnt.y = y * n / z;
-			return pnt;
-		}
-
-		public boolean outOfSight(Point3D left_up) {
-			// TODO Auto-generated method stub
-			return false;
-		}
-	}
-
-	private Camera camera = new Camera();
-
 	private class SingleGrid extends GuiItem {
 		private Grid gridHeld;
 		private Paint paint = new Paint();
 
 		public SingleGrid(Grid grid) {
 			this.gridHeld = grid;
-		}
-
-		private Path getPath() {
-			Path path = new Path();
-			PointF pnt = camera.convert(gridHeld.left_up);
-			path.moveTo(pnt.x, pnt.y);
-			pnt = camera.convert(gridHeld.left_down);
-			path.lineTo(pnt.x, pnt.y);
-			pnt = camera.convert(gridHeld.right_up);
-			path.lineTo(pnt.x, pnt.y);
-			pnt = camera.convert(gridHeld.right_down);
-			path.lineTo(pnt.x, pnt.y);
-			return path;
+			paint.setColor(Color.WHITE);
+			paint.setAlpha(0);
 		}
 
 		@Override
@@ -82,39 +32,37 @@ public class FlashingBoardGuiItem extends BlockedBackToRemoveGuiItemContainer {
 				paint.setAlpha(255);
 			else
 				paint.setAlpha(Math.max(paint.getAlpha() - 20, 0));
-			if (outOfSight(camera))
+			if (gridHeld.outOfSight())
 				removeThis();
 			return super.checkState();
 		}
 
-		private boolean outOfSight(Camera camera) {
-			if (camera.outOfSight(gridHeld.left_up) || camera.outOfSight(gridHeld.left_down)
-					|| camera.outOfSight(gridHeld.right_up)
-					|| camera.outOfSight(gridHeld.right_down))
-				return true;
-			return false;
-		}
-
 		@Override
 		public void draw(Canvas canvas) {
-			canvas.drawPath(getPath(), paint);
+			canvas.drawRect(new RectF(gridHeld.x, gridHeld.y, gridHeld.x + gridHeld.size,
+					gridHeld.y + gridHeld.size), paint);
 		}
 	}
 
 	public class GridBoard {
 		public class Grid {
-			private Point3D left_up;
-			private Point3D left_down;
-			private Point3D right_up;
-			private Point3D right_down;
 			private boolean isFlashing;
+			private int x;
+			private int y;
+			private int size;
 
-			public void setPosition(Point3D startingPoint, Point3D directionPoint1,
-					Point3D directionPoint2, Point3D directionPoint3) {
-				left_up = new Point3D(startingPoint);
-				left_down = new Point3D(directionPoint1);
-				right_up = new Point3D(directionPoint2);
-				right_down = new Point3D(directionPoint3);
+			public Grid(int i, int j, int size) {
+				x = i;
+				y = j;
+				this.size = size;
+				isFlashing = false;
+			}
+
+			public boolean outOfSight() {
+				if (x + size > ScreenInfo.getScreenInfo().getScreenWidth()
+						|| y + size > ScreenInfo.getScreenInfo().getScreenHeight())
+					return true;
+				return false;
 			}
 
 			public boolean isFlashing() {
@@ -123,48 +71,86 @@ public class FlashingBoardGuiItem extends BlockedBackToRemoveGuiItemContainer {
 				return temp;
 			}
 
-			public void setFlashing(boolean isFlashing) {
-				this.isFlashing = isFlashing;
+			public void setFlashing() {
+				this.isFlashing = true;
+			}
+
+			public void move() {
+				x += 10;
+				y += 5;
 			}
 		}
 
 		private int width;
 		private int height;
 		private Grid[][] board;
-		private Point3D turn_point1;
-		private Point3D turn_point2;
 
-		private void turn() {
-			// TODO
+		public GridBoard(int posx, int posy) {
+			this(30, 30, posx, posy);
 		}
 
-		public GridBoard(Point3D turnPoint1, Point3D turnPoint2) {
-			this(100, 100, turnPoint1, turnPoint2);
-		}
-
-		public GridBoard(int width, int height, Point3D turnPoint1, Point3D turnPoint2) {
+		public GridBoard(int width, int height, int posx, int posy) {
 			this.width = width;
 			this.height = height;
 			board = new Grid[width][height];
+			int size = (int) (Math.random() * 7 + 5);
 			for (int i = 0; i < width; ++i)
 				for (int j = 0; j < height; ++j)
-					board[i][j] = new Grid();
-			turn_point1 = new Point3D(turnPoint1);
-			turn_point2 = new Point3D(turnPoint2);
+					board[i][j] = new Grid(i * (size + 3) + posx, j * (size + 3) + posy, size);
 		}
 
 		public Grid getGrid(int i, int j) {
 			return board[i % width][j % height];
 		}
+
+		public void flash() {
+			for (Grid[] gs : board)
+				for (Grid g : gs) {
+					if (Math.random() < 0.003)
+						g.setFlashing();
+					g.move();
+				}
+		}
 	}
+
+	private ArrayDeque<GridBoard> boards;
+	private Waitter waitter = new Waitter(300);
+	private MediaPlayer mediaPlayer;
 
 	public FlashingBoardGuiItem() {
 		super();
-		// TODO
+		mediaPlayer = MediaPlayer.create(MusicActivity.getActivity(), R.raw.hua_er_zi);
+		mediaPlayer.setLooping(true);
+		mediaPlayer.start();
+
+		this.backgroundColor = Color.BLACK;
+		waitter.isOk();
+		boards = new ArrayDeque<FlashingBoardGuiItem.GridBoard>();
 	}
 
-	public void addBoard(GridBoard board) {
-		// TODO
+	@Override
+	public void removeThis() {
+		mediaPlayer.stop();
+		super.removeThis();
 	}
 
+	@Override
+	public boolean checkState() {
+		if (Math.random() > 0.002) {
+			GridBoard board;
+			boards.add(board = new GridBoard((int) (Math.random()
+					* ScreenInfo.getScreenInfo().getScreenWidth() - ScreenInfo.getScreenInfo()
+					.getScreenWidth() / 2), (int) (Math.random()
+					* ScreenInfo.getScreenInfo().getScreenHeight() - ScreenInfo.getScreenInfo()
+					.getScreenHeight() / 2)));
+			for (int i = 0; i < 30; i++)
+				for (int j = 0; j < 30; j++)
+					addToList(new SingleGrid(board.getGrid(i, j)));
+		}
+		if (waitter.isOk())
+			boards.removeFirst();
+		for (GridBoard board : boards)
+			board.flash();
+		return super.checkState();
+	}
 }

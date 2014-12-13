@@ -11,6 +11,7 @@ import net.muststudio.musicbox.gui.CircledIconButtonGuiItem;
 import net.muststudio.musicbox.gui.ColoredGuiItemContainer;
 import net.muststudio.musicbox.gui.DebugGuiItem;
 import net.muststudio.musicbox.gui.EnjoyModeSwitcher;
+import net.muststudio.musicbox.gui.FlashingBoardGuiItem;
 import net.muststudio.musicbox.gui.MusicBallBoxGuiItem;
 import net.muststudio.musicbox.gui.MusicGridGuiItem;
 import net.muststudio.musicbox.gui.PikachuGuiItemContainer;
@@ -49,18 +50,67 @@ public final class MainView extends SurfaceViewFrame {
 					new RelativePoint(0.88, 0.98), Color.rgb(0xd4, 0xce, 0x42)));
 
 			int backColor = Color.rgb(0x1d, 0x2a, 0x57);
-			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.15, 0.25),
-					new RelativePoint(0.5, 0.6), backColor, R.drawable.music).setTask(new Task() {
+
+			addToList(new CircledIconButtonGuiItem(new RelativePoint(
+					0.5 + 0.4 * Math.cos(1. / 3 * Math.PI) - 0.1,
+					0.6 + 0.4 * Math.sin(1. / 3 * Math.PI) - 0.1), new RelativePoint(
+					0.5 + 0.4 * Math.cos(1. / 3 * Math.PI) + 0.1,
+					0.6 + 0.4 * Math.sin(1. / 3 * Math.PI) + 0.1), backColor, R.drawable.music)
+					.setTask(new Task() {
+						@Override
+						public void task() {
+							addTo(new MusicBallBoxGuiItem());
+						}
+					}));
+			addToList(new CircledIconButtonGuiItem(new RelativePoint(
+					0.5 + 0.4 * Math.cos(2. / 3 * Math.PI) - 0.1,
+					0.6 + 0.4 * Math.sin(2. / 3 * Math.PI) - 0.1), new RelativePoint(
+					0.5 + 0.4 * Math.cos(2. / 3 * Math.PI) + 0.1,
+					0.6 + 0.4 * Math.sin(2. / 3 * Math.PI) + 0.1), backColor, R.drawable.music2)
+					.setTask(new Task() {
+						@Override
+						public void task() {
+							addTo(new MusicGridGuiItem());
+						}
+					}));
+			addToList(new CircledIconButtonGuiItem(new RelativePoint(
+					0.5 + 0.4 * Math.cos(Math.PI) - 0.1, 0.6 + 0.4 * Math.sin(Math.PI) - 0.1),
+					new RelativePoint(0.5 + 0.4 * Math.cos(Math.PI) + 0.1, 0.6 + 0.4 * Math
+							.sin(Math.PI) + 0.1), backColor, R.drawable.music3).setTask(new Task() {
 				@Override
 				public void task() {
-					addTo(new MusicBallBoxGuiItem());
+					addTo(new BoyGuiItemContainer());
 				}
 			}));
-			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.5, 0.6), new RelativePoint(
-					0.85, 0.95), backColor, R.drawable.music2).setTask(new Task() {
+			addToList(new CircledIconButtonGuiItem(new RelativePoint(
+					0.5 + 0.4 * Math.cos(4. / 3 * Math.PI) - 0.1,
+					0.6 + 0.4 * Math.sin(4. / 3 * Math.PI) - 0.1), new RelativePoint(
+					0.5 + 0.4 * Math.cos(4. / 3 * Math.PI) + 0.1,
+					0.6 + 0.4 * Math.sin(4. / 3 * Math.PI) + 0.1), backColor, R.drawable.music4)
+					.setTask(new Task() {
+						@Override
+						public void task() {
+							addTo(new PikachuGuiItemContainer());
+						}
+					}));
+			addToList(new CircledIconButtonGuiItem(new RelativePoint(
+					0.5 + 0.4 * Math.cos(5. / 3 * Math.PI) - 0.1,
+					0.6 + 0.4 * Math.sin(5. / 3 * Math.PI) - 0.1), new RelativePoint(
+					0.5 + 0.4 * Math.cos(5. / 3 * Math.PI) + 0.1,
+					0.6 + 0.4 * Math.sin(5. / 3 * Math.PI) + 0.1), backColor, R.drawable.music5)
+					.setTask(new Task() {
+						@Override
+						public void task() {
+							addTo(new ShiningHeartGuiItem());
+						}
+					}));
+			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.5 + 0.4 * Math.cos(0) - 0.1,
+					0.6 + 0.4 * Math.sin(0) - 0.1), new RelativePoint(
+					0.5 + 0.4 * Math.cos(0) + 0.1, 0.6 + 0.4 * Math.sin(0) + 0.1), backColor,
+					R.drawable.music6).setTask(new Task() {
 				@Override
 				public void task() {
-					addTo(new MusicGridGuiItem());
+					addTo(new FlashingBoardGuiItem());
 				}
 			}));
 			addToList(new CircledIconButtonGuiItem(new RelativePoint(0.43, 1.13),
@@ -72,7 +122,6 @@ public final class MainView extends SurfaceViewFrame {
 			}));
 
 			addToList(new EnjoyModeSwitcher());
-			addToList(new BoyGuiItemContainer());
 		}
 	}
 

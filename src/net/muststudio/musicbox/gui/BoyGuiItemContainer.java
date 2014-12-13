@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.media.MediaPlayer;
+import net.muststudio.musicbox.MusicActivity;
 import net.muststudio.musicbox.R;
 import net.muststudio.util.guiitemlib.ui.BitmapPainter;
 import net.muststudio.util.guiitemlib.ui.BlockedBackToRemoveGuiItemContainer;
@@ -68,11 +70,22 @@ public class BoyGuiItemContainer extends BlockedBackToRemoveGuiItemContainer {
 		}
 	}
 
+	private MediaPlayer mediaPlayer;
+
 	public BoyGuiItemContainer() {
 		addToList(new BitmapPainter(new RelativePoint(0, 0), new RelativePoint(1, 0, false, true))
 				.setBitmap(BitmapHolder.getInstance().getBitmap(R.drawable.photo)));
 		do
 			addToList(new BoyGuiItem());
 		while (Math.random() > 0.5);
+		mediaPlayer = MediaPlayer.create(MusicActivity.getActivity(), R.raw.ping_si);
+		mediaPlayer.setLooping(true);
+		mediaPlayer.start();
+	}
+
+	@Override
+	public void removeThis() {
+		mediaPlayer.stop();
+		super.removeThis();
 	}
 }

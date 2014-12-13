@@ -3,6 +3,8 @@ package net.muststudio.musicbox.gui;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.media.MediaPlayer;
+import net.muststudio.musicbox.MusicActivity;
 import net.muststudio.musicbox.R;
 import net.muststudio.util.guiitemlib.ui.BitmapPainter;
 import net.muststudio.util.guiitemlib.ui.BlockedBackToRemoveGuiItemContainer;
@@ -56,9 +58,14 @@ public class ShiningHeartGuiItem extends BlockedBackToRemoveGuiItemContainer {
 		}
 	}
 
+	private MediaPlayer mediaPlayer;
+
 	public ShiningHeartGuiItem() {
 		addToList(new BitmapPainter(new RelativePoint(0, 0), new RelativePoint(1, 0, false, true))
 				.setBitmap(BitmapHolder.getInstance().getBitmap(R.drawable.smch)));
+		mediaPlayer = MediaPlayer.create(MusicActivity.getActivity(), R.raw.ji_te_ba);
+		mediaPlayer.setLooping(true);
+		mediaPlayer.start();
 	}
 
 	@Override
@@ -66,5 +73,11 @@ public class ShiningHeartGuiItem extends BlockedBackToRemoveGuiItemContainer {
 		if (Math.random() > 0.97)
 			addToList(new HeartGuiItem());
 		return super.checkState();
+	}
+
+	@Override
+	public void removeThis() {
+		mediaPlayer.stop();
+		super.removeThis();
 	}
 }

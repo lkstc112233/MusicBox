@@ -132,56 +132,45 @@ public class MusicActivity extends Activity implements PropertyChangeListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// TODO remove these comments.
-		// // Use this check to determine whether BLE is supported on the
-		// device.
-		// // Then
-		// // you can selectively disable BLE-related features.
-		// if
-		// (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE))
-		// Toast.makeText(this, R.string.ble_not_supported,
-		// Toast.LENGTH_LONG).show();
-		// else
-		// bleEnabled = true;
-		//
-		// // Initializes a Bluetooth deviceListAdapter. For API level 18 and
-		// // above, get a
-		// // reference to BluetoothAdapter through BluetoothManager.
-		// BluetoothManager bluetoothManager = (BluetoothManager) this
-		// .getSystemService(Context.BLUETOOTH_SERVICE);
-		// if (bluetoothManager == null) {
-		// Toast.makeText(this, "System Error! Code:0x01",
-		// Toast.LENGTH_LONG).show();
-		// finish();
-		// return;
-		// }
-		// mBluetoothAdapter = bluetoothManager.getAdapter();
-		//
-		// // Checks if Bluetooth is supported on the device.
-		// if (mBluetoothAdapter == null)
-		// Toast.makeText(this, R.string.bt_not_supported,
-		// Toast.LENGTH_LONG).show();
-		//
-		// active = false;
-		// try {
-		// PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-		// } catch (Throwable e) {
-		// Toast.makeText(this, "System Error! Code:0x02",
-		// Toast.LENGTH_LONG).show();
-		// finish();
-		// return;
-		// }
-		//
-		// // Register the BroadcastReceiver
-		// try {
-		// mFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-		// } catch (Throwable e) {
-		// Toast.makeText(this, "System Error! Code:0x03",
-		// Toast.LENGTH_LONG).show();
-		// finish();
-		// return;
-		// }
-		// TODO remove these comments.
+		// Use this check to determine whether BLE is supported on the device.
+		// Then you can selectively disable BLE-related features.
+		if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE))
+			Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_LONG).show();
+		else
+			bleEnabled = true;
+
+		// Initializes a Bluetooth deviceListAdapter. For API level 18 and
+		// above, get a reference to BluetoothAdapter through BluetoothManager.
+		BluetoothManager bluetoothManager = (BluetoothManager) this
+				.getSystemService(Context.BLUETOOTH_SERVICE);
+		if (bluetoothManager == null) {
+			Toast.makeText(this, "System Error! Code:0x01", Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
+		mBluetoothAdapter = bluetoothManager.getAdapter();
+
+		// Checks if Bluetooth is supported on the device.
+		if (mBluetoothAdapter == null)
+			Toast.makeText(this, R.string.bt_not_supported, Toast.LENGTH_LONG).show();
+
+		active = false;
+		try {
+			PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+		} catch (Throwable e) {
+			Toast.makeText(this, "System Error! Code:0x02", Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
+
+		// Register the BroadcastReceiver
+		try {
+			mFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+		} catch (Throwable e) {
+			Toast.makeText(this, "System Error! Code:0x03", Toast.LENGTH_LONG).show();
+			finish();
+			return;
+		}
 
 		// Initialization
 		act = this;
@@ -206,8 +195,7 @@ public class MusicActivity extends Activity implements PropertyChangeListener {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(new MainView(this));
 
-		// TODO remove this comment.
-		// initApp();
+		initApp();
 	}
 
 	@Override
