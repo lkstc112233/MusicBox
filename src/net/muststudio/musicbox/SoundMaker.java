@@ -60,7 +60,10 @@ public class SoundMaker implements SoundPlayer {
 
 	private static void playSoundNo(int i) {
 		soundPool.play(soundIds.get(i % soundIds.size()), 1, 1, 1, 0, 1f);
+	}
 
+	public static void playSoundNo(int i, float vol) {
+		soundPool.play(soundIds.get(i % soundIds.size()), vol, vol, 1, 0, 1f);
 	}
 
 	@Override
@@ -69,6 +72,7 @@ public class SoundMaker implements SoundPlayer {
 			playSoundNo(i);
 	}
 
+	@Override
 	public void playSoundId(int Id) {
 		playSoundNo(Id);
 	}

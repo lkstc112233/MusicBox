@@ -92,6 +92,7 @@ public class PikachuGuiItemContainer extends BlockedBackToRemoveGuiItemContainer
 		mediaPlayer = MediaPlayer.create(MusicActivity.getActivity(), R.raw.kuai_san);
 		mediaPlayer.setLooping(true);
 		mediaPlayer.start();
+		addToList(new InvisibleMusicBallBoxGuiItem());
 	}
 
 	@Override

@@ -15,7 +15,7 @@ class CellWaveGuiItem extends SquareGuiItem {
 		paintW.setStrokeWidth(15);
 	}
 
-	private Paint paintW = new Paint();
+	protected Paint paintW = new Paint();
 	private float radius = 0;
 	private final float step = 20;
 

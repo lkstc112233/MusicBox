@@ -126,6 +126,7 @@ public class FlashingBoardGuiItem extends BlockedBackToRemoveGuiItemContainer {
 		this.backgroundColor = Color.BLACK;
 		waitter.isOk();
 		boards = new ArrayDeque<FlashingBoardGuiItem.GridBoard>();
+		addToList(new InvisibleMusicBallBoxGuiItem());
 	}
 
 	@Override

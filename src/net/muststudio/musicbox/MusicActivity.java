@@ -195,7 +195,7 @@ public class MusicActivity extends Activity implements PropertyChangeListener {
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(new MainView(this));
 
-		initApp();
+		 initApp();
 	}
 
 	@Override

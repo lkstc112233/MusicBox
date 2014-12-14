@@ -81,6 +81,7 @@ public class BoyGuiItemContainer extends BlockedBackToRemoveGuiItemContainer {
 		mediaPlayer = MediaPlayer.create(MusicActivity.getActivity(), R.raw.ping_si);
 		mediaPlayer.setLooping(true);
 		mediaPlayer.start();
+		addToList(new InvisibleMusicBallBoxGuiItem());
 	}
 
 	@Override

@@ -66,6 +66,7 @@ public class ShiningHeartGuiItem extends BlockedBackToRemoveGuiItemContainer {
 		mediaPlayer = MediaPlayer.create(MusicActivity.getActivity(), R.raw.ji_te_ba);
 		mediaPlayer.setLooping(true);
 		mediaPlayer.start();
+		addToList(new InvisibleMusicBallBoxGuiItem());
 	}
 
 	@Override

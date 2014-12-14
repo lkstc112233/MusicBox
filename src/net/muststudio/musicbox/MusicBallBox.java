@@ -45,7 +45,7 @@ public class MusicBallBox {
 
 		public void refresh() {
 			final float factor = 0.3f;
-			final float factor2 = 0.03f;
+			final float factor2 = 0.3f;
 			x = -MusicActivity.getActivity().phoneAccelerometerValues[0] * factor;
 			y = MusicActivity.getActivity().phoneAccelerometerValues[1] * factor;
 			x += MusicActivity.getActivity().sensorAccelerometerValues.x * factor2;
